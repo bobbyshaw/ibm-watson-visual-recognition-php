@@ -9,13 +9,15 @@
             "email": "me@tomrobertshaw.net"
         }
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": ">=5.5.0",
         "guzzlehttp/guzzle": "6.1.*",
         "symfony/console": "2.6.*"
     },
     "require-dev": {
-        "phpdocumentor/phpdocumentor": "2.8.*",
+        "phpdocumentor/phpdocumentor": "2.*",
         "phpunit/phpunit": "4.0.*",
         "phpro/grumphp": "^0.7.0",
         "fabpot/php-cs-fixer": "^1.11",
