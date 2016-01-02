@@ -7,6 +7,13 @@ service.
 See [API documentation](https://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/visual-recognition/api/v2/).
 
 
+## Commands
+
+The library also comes with a set of commands to use on the command line
+
+    php app/console classifiers:get [-a|--major-api-version="..."] [-d|--version-date="..."] username password
+
+
 ## Development
 
 
