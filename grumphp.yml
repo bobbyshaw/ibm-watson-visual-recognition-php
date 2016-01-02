@@ -1,0 +1,9 @@
+parameters:
+    git_dir: .
+    bin_dir: ./vendor/bin
+    tasks:
+        composer: ~
+        phpcs:
+            tab_width: 4
+        phpcsfixer: ~
+        phpunit: ~
