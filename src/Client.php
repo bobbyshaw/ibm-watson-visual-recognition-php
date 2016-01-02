@@ -16,10 +16,38 @@ class Client
     const ENDPOINT = 'https://gateway.watsonplatform.net/visual-recognition-beta/api/';
     const CLASSIFIERS_PATH = 'classifiers/';
 
+    /**
+     * IBM Watson Service Username
+     * @var String
+     */
     private $username;
+
+    /**
+     * IBM Watson Service Password
+     *
+     * @var String
+     */
     private $password;
+
+    /**
+     * Major API Version
+     *
+     * @var string
+     */
     private $majorApiVersion;
+
+    /**
+     * API version Date
+     *
+     * @var string
+     */
     private $version;
+
+    /**
+     * Guzzle HTTP Client for making requests
+     *
+     * @var GuzzleHttp\Client
+     */
     private $client;
 
     /**

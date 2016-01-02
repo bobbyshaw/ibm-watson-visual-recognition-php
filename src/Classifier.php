@@ -9,10 +9,16 @@ namespace Bobbyshaw\WatsonVisualRecognition;
  */
 class Classifier
 {
-    /** @var string */
+    /**
+     * Classifier ID
+     * @var string
+     */
     private $id;
 
-    /** @var string */
+    /**
+     * Classifier Name
+     * @var string
+     */
     private $name;
 
     /**
@@ -28,6 +34,8 @@ class Classifier
     }
 
     /**
+     * Get Classifier ID
+     *
      * @return string
      */
     public function getId()
@@ -36,6 +44,8 @@ class Classifier
     }
 
     /**
+     * Get Classifier name.
+     *
      * @return string
      */
     public function getName()
