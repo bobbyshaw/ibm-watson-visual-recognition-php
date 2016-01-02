@@ -6,6 +6,7 @@ service.
 
 See [API documentation](https://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/visual-recognition/api/v2/).
 
+![Build Status](https://travis-ci.org/bobbyshaw/watson-visual-recognition-php.svg)
 
 ## Commands
 
