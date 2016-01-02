@@ -1,7 +1,7 @@
 {
     "name": "bobbyshaw/watson-visual-recognition",
     "description": "A php library to provide API calls & handle authentication with the Bluemix visual recognition",
-    "license": "Apache 2.0",
+    "license": "Apache-2.0",
     "keywords": ["ibm" ,"watson", "bluemix", "visual recognition"],
     "authors": [
         {
