@@ -90,7 +90,7 @@ class Client
      * Get list of available classifiers
      *
      * @api
-     * @return mixed
+     * @return Classifier[]
      * @throws \Exception
      */
     public function getClassifiers()
