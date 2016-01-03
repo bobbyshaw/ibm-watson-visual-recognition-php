@@ -5,6 +5,7 @@ namespace Bobbyshaw\WatsonVisualRecognition;
 /**
  * This class formalises information about a classifier.
  *
+ * @api
  * @author Tom Robertshaw <me@tomrobertshaw.net>
  */
 class Classifier

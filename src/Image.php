@@ -5,6 +5,7 @@ namespace Bobbyshaw\WatsonVisualRecognition;
 /**
  * Image response for classification request
  *
+ * @api
  * @author Tom Robertshaw <me@tomrobertshaw.net>
  */
 class Image
