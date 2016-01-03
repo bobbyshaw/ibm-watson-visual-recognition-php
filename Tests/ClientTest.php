@@ -1,10 +1,8 @@
 <?php
 
-namespace Bobbyshaw\WatsonVisualRecognition\tests;
+namespace Bobbyshaw\WatsonVisualRecognition\Tests;
 
-use Bobbyshaw\WatsonVisualRecognition\Classifier;
 use Bobbyshaw\WatsonVisualRecognition\Client;
-use Bobbyshaw\WatsonVisualRecognition\Exceptions\AuthException;
 use Bobbyshaw\WatsonVisualRecognition\Image;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Handler\MockHandler;
@@ -128,8 +126,25 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testGetClassifiersFailedAuth()
     {
         // Create a mock and queue two responses.
+        $html = <<<'EOD'
+<HTML>
+    <HEAD>
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+        <TITLE>Watson Error</TITLE>
+    </HEAD>
+    <BODY>
+        <HR>
+        <p>Invalid access to resource - /visual-recognition-beta/api/v2/classify?version=2015-12-28</p>
+        <p>User access not Authorized.</p><p>Gateway Error Code : ERCD250-LDAP-DN-AUTHERR</p>
+        <p>Unable to communicate with Watson.</p>
+        <p>Request URL : /visual-recognition-beta/api/v2/classify?version=2015-12-28</p>
+        <p>Error Id :  csf_platform_prod_dp02-18916189</p><p>Date-Time : 2016-01-03T09:04:54-05:00</p>
+    </BODY>
+</HTML>
+EOD;
+
         $mock = new MockHandler([
-            new Response(401, [], '<HTML><HEAD><meta content="text/html; charset=UTF-8" http-equiv="Content-Type"><TITLE>Watson Error</TITLE></HEAD><BODY><HR><p>Invalid access to resource - /visual-recognition-beta/api/v2/classify?version=2015-12-28</p><p>User access not Authorized.</p><p>Gateway Error Code : ERCD250-LDAP-DN-AUTHERR</p><p>Unable to communicate with Watson.</p><p>Request URL : /visual-recognition-beta/api/v2/classify?version=2015-12-28</p><p>Error Id :  csf_platform_prod_dp02-18916189</p><p>Date-Time : 2016-01-03T09:04:54-05:00</p></BODY></HTML>')
+            new Response(401, [], $html)
         ]);
 
         $handler = HandlerStack::create($mock);
@@ -309,8 +324,24 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testClassifyAuthException()
     {
         // Create a mock and queue two responses.
+        $html = <<<'EOD'
+<HTML>
+    <HEAD>
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+        <TITLE>Watson Error</TITLE>
+    </HEAD>
+    <BODY>
+        <HR>
+        <p>Invalid access to resource - /visual-recognition-beta/api/v2/classify?version=2015-12-28</p>
+        <p>User access not Authorized.</p><p>Gateway Error Code : ERCD250-LDAP-DN-AUTHERR</p>
+        <p>Unable to communicate with Watson.</p>
+        <p>Request URL : /visual-recognition-beta/api/v2/classify?version=2015-12-28</p>
+        <p>Error Id :  csf_platform_prod_dp02-18916189</p><p>Date-Time : 2016-01-03T09:04:54-05:00</p>
+    </BODY>
+</HTML>
+EOD;
         $mock = new MockHandler([
-            new Response(401, [], '<HTML><HEAD><meta content="text/html; charset=UTF-8" http-equiv="Content-Type"><TITLE>Watson Error</TITLE></HEAD><BODY><HR><p>Invalid access to resource - /visual-recognition-beta/api/v2/classify?version=2015-12-28</p><p>User access not Authorized.</p><p>Gateway Error Code : ERCD250-LDAP-DN-AUTHERR</p><p>Unable to communicate with Watson.</p><p>Request URL : /visual-recognition-beta/api/v2/classify?version=2015-12-28</p><p>Error Id :  csf_platform_prod_dp02-18916189</p><p>Date-Time : 2016-01-03T09:04:54-05:00</p></BODY></HTML>')
+            new Response(401, [], $html)
         ]);
 
         $handler = HandlerStack::create($mock);
@@ -334,8 +365,24 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testClassifyInvalidArgumentException()
     {
         // Create a mock and queue two responses.
+        $html = <<<'EOD'
+<HTML>
+    <HEAD>
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+        <TITLE>Watson Error</TITLE>
+    </HEAD>
+    <BODY>
+        <HR>
+        <p>Invalid access to resource - /visual-recognition-beta/api/v2/classify?version=2015-12-28</p>
+        <p>User access not Authorized.</p><p>Gateway Error Code : ERCD250-LDAP-DN-AUTHERR</p>
+        <p>Unable to communicate with Watson.</p>
+        <p>Request URL : /visual-recognition-beta/api/v2/classify?version=2015-12-28</p>
+        <p>Error Id :  csf_platform_prod_dp02-18916189</p><p>Date-Time : 2016-01-03T09:04:54-05:00</p>
+    </BODY>
+</HTML>
+EOD;
         $mock = new MockHandler([
-            new Response(401, [], '<HTML><HEAD><meta content="text/html; charset=UTF-8" http-equiv="Content-Type"><TITLE>Watson Error</TITLE></HEAD><BODY><HR><p>Invalid access to resource - /visual-recognition-beta/api/v2/classify?version=2015-12-28</p><p>User access not Authorized.</p><p>Gateway Error Code : ERCD250-LDAP-DN-AUTHERR</p><p>Unable to communicate with Watson.</p><p>Request URL : /visual-recognition-beta/api/v2/classify?version=2015-12-28</p><p>Error Id :  csf_platform_prod_dp02-18916189</p><p>Date-Time : 2016-01-03T09:04:54-05:00</p></BODY></HTML>')
+            new Response(401, [], $html)
         ]);
 
         $handler = HandlerStack::create($mock);
@@ -350,5 +397,4 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $this->client->classify(__DIR__ . '/images/cosmos-flower-433424_640.doc');
     }
-
 }
