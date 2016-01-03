@@ -2,22 +2,23 @@
 
 namespace Bobbyshaw\WatsonVisualRecognition\Commands;
 
+use Bobbyshaw\WatsonVisualRecognition\Classifier;
+use Bobbyshaw\WatsonVisualRecognition\Client;
+use Bobbyshaw\WatsonVisualRecognition\Image;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\Table;
-use Bobbyshaw\WatsonVisualRecognition\Client;
-use Bobbyshaw\WatsonVisualRecognition\Classifier;
 
 /**
- * Command to get a list of classifiers
+ * Command to get classify image(s)
  *
  * @package Bobbyshaw\WatsonVisualRecognition\Commands
  * @author Tom Robertshaw <me@tomrobertshaw.net>
  */
-class GetClassifiersCommand extends Command
+class ClassifyCommand extends Command
 {
     /**
      * Configure command
@@ -25,8 +26,8 @@ class GetClassifiersCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('classifiers:get')
-            ->setDescription('Get Classifiers')
+            ->setName('classifiers:classify')
+            ->setDescription('Use classifiers to classify image')
             ->addArgument(
                 'username',
                 InputArgument::REQUIRED,
@@ -36,6 +37,17 @@ class GetClassifiersCommand extends Command
                 'password',
                 InputArgument::REQUIRED,
                 'IBM Watson Service credentials password.'
+            )
+            ->addArgument(
+                'images',
+                InputArgument::REQUIRED,
+                'Individual or zip of images.'
+            )
+            ->addOption(
+                'classifiers',
+                '-c',
+                InputOption::VALUE_REQUIRED,
+                'Classifiers that should be tested against'
             )
             ->addOption(
                 'major-api-version',
@@ -76,15 +88,26 @@ class GetClassifiersCommand extends Command
 
         $client = new Client($config);
 
-        $classifiers = $client->getClassifiers();
+        $classifierIds = null;
+        if ($input->getOption('classifiers')) {
+            $classifierIds = explode(',', $input->getOption('classifiers'));
+        }
+
+        $images = $client->classify($input->getArgument('images'), $classifierIds);
 
         $tableRows = [];
-        /** @var Classifier $classifier */
-        foreach ($classifiers as $classifier) {
-            $tableRows[] = [$classifier->getId(), $classifier->getName()];
+        /** @var Image $image */
+        foreach ($images as $image) {
+            /** @var Classifier $classifier */
+            foreach ($image->getClassifiers() as $classifier) {
+                $tableRows[] = [
+                    $image->getName(), $classifier->getId(), $classifier->getName(), $classifier->getScore()
+                ];
+            }
         }
 
         $table = new Table($output);
-        $table->setHeaders(['ID', 'Name'])->setRows($tableRows)->render();
+        $table->setHeaders(['Image', 'Classifier ID', 'Classifier Name', 'Classifier Score'])
+            ->setRows($tableRows)->render();
     }
 }

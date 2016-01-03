@@ -3,6 +3,7 @@
 namespace Bobbyshaw\WatsonVisualRecognition;
 
 use GuzzleHttp;
+use Bobbyshaw\WatsonVisualRecognition\Exceptions\AuthException;
 
 /**
  * This is the primary library class which handles request to the IBM Watson Visual Recognition Service
@@ -15,6 +16,8 @@ class Client
 {
     const ENDPOINT = 'https://gateway.watsonplatform.net/visual-recognition-beta/api/';
     const CLASSIFIERS_PATH = 'classifiers/';
+    const CLASSIFY_PATH = 'classify/';
+    const ALLOWED_FILE_TYPES = ['.gif', '.jpg', '.png', '.zip'];
 
     /**
      * IBM Watson Service Username
@@ -87,22 +90,33 @@ class Client
      * Get list of available classifiers
      *
      * @api
-     * @param null $params
      * @return mixed
      * @throws \Exception
      */
-    public function getClassifiers($params = null)
+    public function getClassifiers()
     {
-        $request = $this->getRequest('GET', static::CLASSIFIERS_PATH, $params);
-        $response = $this->client->send($request);
+        try {
+            $response = $this->client->get($this->getApiUrl(static::CLASSIFIERS_PATH), [
+                'auth' => [$this->username, $this->password],
+                'query' => [
+                    'version' => $this->version,
+                ]
+            ]);
 
-        if ($response->getStatusCode() != 200) {
-            throw new \Exception($response->getBody()->getContents(), $response->getStatusCode());
+            if ($response->getStatusCode() != 200) {
+                throw new \Exception($response->getBody()->getContents(), $response->getStatusCode());
+            }
+
+            $result = json_decode($response->getBody()->getContents());
+        } catch (GuzzleHttp\Exception\ClientException $e) {
+            if ($e->getCode() == 401) {
+                throw new AuthException('Invalid credentials provided');
+            } else {
+                throw $e;
+            }
         }
 
-        $result = json_decode($response->getBody()->getContents());
-
-        $classifiers = array();
+        $classifiers = [];
 
         if (!$result->classifiers) {
             throw new \Exception('No classifiers found');
@@ -113,6 +127,85 @@ class Client
         }
 
         return $classifiers;
+    }
+
+    /**
+     * Classify an image or zip of images.
+     *
+     * @param $image - The image file path (.jpg, .png, .jpg) or compressed (.zip) file of images to classify.
+     * @param array|null $classifierIds - Array of classifiers IDs to restrict classification to.
+     * @return Image[] which also contains Classifier[]
+     * @throws \InvalidArgumentException if image is incorrect file format or if classifier IDs is not an array
+     * @throws \Exception if error is returned from
+     */
+    public function classify($image, $classifierIds = null)
+    {
+        if (!in_array(substr($image, -4), static::ALLOWED_FILE_TYPES)) {
+            throw new \InvalidArgumentException(
+                'Image file needs to be one of the following types: ' . implode(', ', static::ALLOWED_FILE_TYPES)
+            );
+        }
+
+        $params = [
+            [
+                'name' => 'images_file',
+                'contents' => fopen($image, 'r'),
+                'filename' => $image
+            ]
+        ];
+
+        if (!is_null($classifierIds)) {
+            if (is_array($classifierIds)) {
+                $classifierIdParams = [];
+                foreach ($classifierIds as $id) {
+                    $classifierIdParams[] = ['classifier_id' => $id];
+                }
+
+                $params[] = [
+                    'name' => 'classifier_ids',
+                    'contents' => json_encode(['classifiers' => $classifierIds])
+                ];
+            } else {
+                throw new \InvalidArgumentException('Classifier IDs must be array');
+            }
+        }
+
+        try {
+            $response = $this->client->post($this->getApiUrl(static::CLASSIFY_PATH), [
+                'auth' => [$this->username, $this->password],
+                'multipart' => $params,
+                'query' => [
+                    'version' => $this->version,
+                ]
+            ]);
+
+            if ($response->getStatusCode() != 200) {
+                throw new \Exception($response->getBody()->getContents(), $response->getStatusCode());
+            }
+
+            $results = json_decode($response->getBody()->getContents());
+        } catch (GuzzleHttp\Exception\ClientException $e) {
+            if ($e->getCode() == 401) {
+                throw new AuthException('Invalid credentials provided');
+            } elseif ($e->getCode() == 415) {
+                throw new \InvalidArgumentException('Unsupported image type');
+            } else {
+                throw $e;
+            }
+        }
+
+        $images = [];
+
+        foreach ($results->images as $image) {
+            $classifiers = [];
+            foreach ($image->scores as $item) {
+                $classifiers[] = new Classifier($item->classifier_id, $item->name, $item->score);
+            }
+
+            $images[] = new Image($image->image, $classifiers);
+        }
+
+        return $images;
     }
 
     /**
@@ -127,25 +220,13 @@ class Client
     }
 
     /**
-     * Build the Request
+     * Get full API URL f
      *
-     * @param $method
-     * @param $path
-     * @param array $params
-     * @return GuzzleHttp\Psr7\Request
+     * @param String $path of API needed
+     * @returns String of full URL
      */
-    public function getRequest($method, $path, $params = array())
+    public function getApiUrl($path)
     {
-        $headers = array(
-            'Authorization' => 'Basic ' . base64_encode($this->username . ':' . $this->password)
-        );
-
-        $params['version'] = $this->version;
-
-        $url = $this->getEndpoint() . $path . "?" . GuzzleHttp\Psr7\build_query($params);
-
-        $request = new GuzzleHttp\Psr7\Request($method, $url, $headers);
-
-        return $request;
+        return $this->getEndpoint() . $path;
     }
 }

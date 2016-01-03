@@ -12,9 +12,11 @@
 
     // import the Symfony Console Application
     use Symfony\Component\Console\Application;
+    use Bobbyshaw\WatsonVisualRecognition\Commands\ClassifyCommand;
     use Bobbyshaw\WatsonVisualRecognition\Commands\GetClassifiersCommand;
 
     $app = new Application();
+    $app->add(new ClassifyCommand());
     $app->add(new GetClassifiersCommand());
     $app->run();
 ?>
