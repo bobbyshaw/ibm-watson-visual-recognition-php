@@ -7,7 +7,10 @@ use Bobbyshaw\WatsonVisualRecognition\Image;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Uri;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,31 +61,13 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test creating a request and constructing a URL of the correct format
+     * Test the getClassifiers function HTTP request and response
      *
-     */
-    public function testGetRequest()
-    {
-        $this->markTestIncomplete(
-            'This test requires re-implementing'
-        );
-
-        $request = $this->client->getRequest('GET', 'classifiers/');
-
-        $auth = $request->getHeader('Authorization');
-        $this->assertEquals('Basic ' . base64_encode($this->username . ':' . $this->password), $auth[0]);
-        $this->assertEquals('GET', $request->getMethod());
-        $this->assertEquals('gateway.watsonplatform.net', $request->getUri()->getHost());
-        $this->assertEquals('/visual-recognition-beta/api/v2/classifiers/', $request->getUri()->getPath());
-        $this->assertEquals('version=' . date('Y-m-d'), $request->getUri()->getQuery());
-    }
-
-    /**
-     * Test that the getClassifiers method returns an array of classifiers
+     * @throws \Bobbyshaw\WatsonVisualRecognition\Exceptions\AuthException
+     * @throws \Exception
      */
     public function testGetClassifiers()
     {
-        // Create a mock and queue two responses.
         $mock = new MockHandler([
             new Response(200, [], '{ "classifiers":[
                 {"classifier_id":"Black","name":"Black"},
@@ -98,11 +83,14 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 {"classifier_id":"White","name":"White"},
                 {"classifier_id":"Yellow","name":"Yellow"},
                 {"classifier_id":"Black_and_white","name":"Black_and_white"},
-                {"classifier_id":"Color","name":"Color"}]}')
+                {"classifier_id":"Color","name":"Color"}]}'),
         ]);
 
-        $handler = HandlerStack::create($mock);
-        $guzzle = new GuzzleClient(['handler' => $handler]);
+        $stack = HandlerStack::create($mock);
+        $container = [];
+        $history = Middleware::history($container);
+        $stack->push($history);
+        $guzzle = new GuzzleClient(['handler' => $stack]);
 
         $config = array(
             'username' => $this->username,
@@ -110,9 +98,38 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->client = new Client($config, $guzzle);
-
         $classifiers = $this->client->getClassifiers();
 
+        // One request should be sent
+        $this->assertCount(1, $container);
+
+        $transaction = $container[0];
+
+        /** @var Request $request */
+        $request = $transaction['request'];
+
+        /** @var Uri $uri */
+        $uri = $request->getUri();
+
+        // Check method
+        $this->assertEquals('GET', $request->getMethod());
+
+        // Check we're talking to the right host
+        $this->assertEquals('https', $uri->getScheme());
+        $this->assertEquals('gateway.watsonplatform.net', $uri->getHost());
+
+        // Check version query parameter
+        $query = \GuzzleHttp\Psr7\parse_query($uri->getQuery());
+        $this->assertArrayHasKey('version', $query);
+
+        // Check path
+        $this->assertEquals('/visual-recognition-beta/api/v2/classifiers/', $uri->getPath());
+
+        // Check basic auth
+        $auth = $request->getHeader('Authorization');
+        $this->assertEquals('Basic ' . base64_encode($this->username . ':' . $this->password), $auth[0]);
+
+        // Check response
         $this->assertCount(14, $classifiers);
         $this->assertEquals('Black', $classifiers[0]->getId());
         $this->assertEquals('Black', $classifiers[0]->getName());
@@ -123,7 +140,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException Bobbyshaw\WatsonVisualRecognition\Exceptions\AuthException
      */
-    public function testGetClassifiersFailedAuth()
+    public function testGetClassifiersFailedAuthResponse()
     {
         // Create a mock and queue two responses.
         $html = <<<'EOD'
@@ -161,11 +178,13 @@ EOD;
     }
 
     /**
-     * Test that the classify function returns an array of classifiers and scores
+     * Test classify function HTTP request sent and success response handle
+     *
+     * @throws \Bobbyshaw\WatsonVisualRecognition\Exceptions\AuthException
+     * @throws \Exception
      */
     public function testClassify()
     {
-        // Create a mock and queue two responses.
         $mock = new MockHandler([
             new Response(200, [], '{"images":[
                 {"image":"cosmos-flower-433424_640.jpg",
@@ -187,8 +206,14 @@ EOD;
             }')
         ]);
 
-        $handler = HandlerStack::create($mock);
-        $guzzle = new GuzzleClient(['handler' => $handler]);
+        $container = [];
+        $history = Middleware::history($container);
+
+        $stack = HandlerStack::create($mock);
+        // Add the history middleware to the handler stack.
+        $stack->push($history);
+
+        $guzzle = new GuzzleClient(['handler' => $stack]);
 
         $config = array(
             'username' => $this->username,
@@ -196,10 +221,38 @@ EOD;
         );
 
         $this->client = new Client($config, $guzzle);
-
         $images = $this->client->classify(__DIR__ . '/images/cosmos-flower-433424_640.jpg');
-        $this->assertCount(1, $images);
 
+        // One request sent
+        $this->assertCount(1, $container);
+
+        $transaction = $container[0];
+
+        /** @var Request $request */
+        $request = $transaction['request'];
+
+        /** @var Uri $uri */
+        $uri = $request->getUri();
+
+        // Check method
+        $this->assertEquals('POST', $request->getMethod());
+
+        // Check we're talking to the right host
+        $this->assertEquals('https', $uri->getScheme());
+        $this->assertEquals('gateway.watsonplatform.net', $uri->getHost());
+
+        // Check version query parameter
+        $query = \GuzzleHttp\Psr7\parse_query($uri->getQuery());
+        $this->assertArrayHasKey('version', $query);
+
+        // Check path
+        $this->assertEquals('/visual-recognition-beta/api/v2/classify/', $uri->getPath());
+
+        // Check basic auth
+        $auth = $request->getHeader('Authorization');
+        $this->assertEquals('Basic ' . base64_encode($this->username . ':' . $this->password), $auth[0]);
+
+        // Check response
         $classifiers = $images[0]->getClassifiers();
         $this->assertCount(14, $classifiers);
 
@@ -211,7 +264,7 @@ EOD;
     /**
      * Test that the classify function returns an array of classifiers and scores for classifiers specified
      */
-    public function testClassifyWithSpecificClassifiers()
+    public function testClassifyWithSpecificClassifiersResponse()
     {
         // Create a mock and queue two responses.
         $mock = new MockHandler([
@@ -249,7 +302,7 @@ EOD;
     /**
      * Test that the classify function returns an array of images when presented with a zip
      */
-    public function testClassifyWithZip()
+    public function testClassifyWithZipResponse()
     {
         // Create a mock and queue two responses.
         $mock = new MockHandler([
@@ -321,7 +374,7 @@ EOD;
      *
      * @expectedException Bobbyshaw\WatsonVisualRecognition\Exceptions\AuthException
      */
-    public function testClassifyAuthException()
+    public function testClassifyAuthExceptionResponse()
     {
         // Create a mock and queue two responses.
         $html = <<<'EOD'
@@ -362,7 +415,7 @@ EOD;
      *
      * @expectedException \InvalidArgumentException
      */
-    public function testClassifyInvalidArgumentException()
+    public function testClassifyInvalidArgumentExceptionResponse()
     {
         // Create a mock and queue two responses.
         $html = <<<'EOD'
