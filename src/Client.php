@@ -132,7 +132,7 @@ class Client
     /**
      * Classify an image or zip of images.
      *
-     * @param $image - The image file path (.jpg, .png, .jpg) or compressed (.zip) file of images to classify.
+     * @param String $image - The image file path (.jpg, .png, .jpg) or compressed (.zip) file of images to classify.
      * @param array|null $classifierIds - Array of classifiers IDs to restrict classification to.
      * @return Image[] which also contains Classifier[]
      * @throws \InvalidArgumentException if image is incorrect file format or if classifier IDs is not an array
