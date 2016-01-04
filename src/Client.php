@@ -163,7 +163,7 @@ class Client
 
                 $params[] = [
                     'name' => 'classifier_ids',
-                    'contents' => json_encode(['classifiers' => $classifierIds])
+                    'contents' => json_encode(['classifiers' => $classifierIdParams])
                 ];
             } else {
                 throw new \InvalidArgumentException('Classifier IDs must be array');
