@@ -15,7 +15,7 @@ class Helper
      * Parameters are automatically converted to camelCase. Any parameters which do
      * not match a setter on the target object are ignored.
      *
-     * @param mixed $target     The object to set parameters on
+     * @param Object $target     The object to set parameters on
      * @param array $parameters An array of parameters to set
      */
     public static function initialize($target, $parameters)
