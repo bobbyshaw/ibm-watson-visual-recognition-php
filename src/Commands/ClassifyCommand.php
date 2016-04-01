@@ -5,6 +5,8 @@ namespace Bobbyshaw\WatsonVisualRecognition\Commands;
 use Bobbyshaw\WatsonVisualRecognition\Classifier;
 use Bobbyshaw\WatsonVisualRecognition\Client;
 use Bobbyshaw\WatsonVisualRecognition\Image;
+use Bobbyshaw\WatsonVisualRecognition\Message\ClassifyRequest;
+use Bobbyshaw\WatsonVisualRecognition\Message\ClassifyResponse;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,7 +20,7 @@ use Symfony\Component\Console\Helper\Table;
  * @package Bobbyshaw\WatsonVisualRecognition\Commands
  * @author Tom Robertshaw <me@tomrobertshaw.net>
  */
-class ClassifyCommand extends Command
+class ClassifyCommand extends BaseCommand
 {
     /**
      * Configure command
@@ -50,12 +52,6 @@ class ClassifyCommand extends Command
                 'Classifiers that should be tested against'
             )
             ->addOption(
-                'major-api-version',
-                '-a',
-                InputOption::VALUE_REQUIRED,
-                'Major API version, defaults to v2'
-            )
-            ->addOption(
                 'version-date',
                 '-d',
                 InputOption::VALUE_REQUIRED,
@@ -78,22 +74,22 @@ class ClassifyCommand extends Command
             'password' => $input->getArgument('password'),
         ];
 
-        if ($majorApiVerson = $input->getOption('major-api-version')) {
-            $config['major-api-version'] = $majorApiVerson;
-        }
-
         if ($version = $input->getOption('version-date')) {
             $config['version'] = $version;
         }
 
-        $client = new Client($config);
+        $params = ['images_file' => $input->getArgument('images')];
 
-        $classifierIds = null;
         if ($input->getOption('classifiers')) {
-            $classifierIds = explode(',', $input->getOption('classifiers'));
+            $params['classifier_ids'] = explode(',', $input->getOption('classifiers'));
         }
 
-        $images = $client->classify($input->getArgument('images'), $classifierIds);
+        $this->client->initialize($config);
+        $request = $this->client->classify($params);
+
+        /** @var ClassifyResponse $response */
+        $response = $request->send();
+        $images = $response->getImages();
 
         $tableRows = [];
         /** @var Image $image */

@@ -56,7 +56,7 @@ class Image
 
     /**
      * Get classifier by ID
-     * @param $id Classifier ID
+     * @param String $id Classifier ID
      * @return Classifier
      */
     public function getClassifier($id)
@@ -67,5 +67,7 @@ class Image
                 return $classifier;
             }
         }
+
+        return false;
     }
 }

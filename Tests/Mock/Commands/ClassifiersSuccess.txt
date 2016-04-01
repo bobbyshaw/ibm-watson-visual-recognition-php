@@ -1,0 +1,18 @@
++-----------------+-----------------+
+| ID              | Name            |
++-----------------+-----------------+
+| Black           | Black           |
+| Blue            | Blue            |
+| Brown           | Brown           |
+| Cyan            | Cyan            |
+| Green           | Green           |
+| Magenta         | Magenta         |
+| Mixed_Color     | Mixed_Color     |
+| Orange          | Orange          |
+| Red             | Red             |
+| Violet          | Violet          |
+| White           | White           |
+| Yellow          | Yellow          |
+| Black_and_white | Black_and_white |
+| Color           | Color           |
++-----------------+-----------------+

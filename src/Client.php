@@ -2,8 +2,12 @@
 
 namespace Bobbyshaw\WatsonVisualRecognition;
 
-use GuzzleHttp;
-use Bobbyshaw\WatsonVisualRecognition\Exceptions\AuthException;
+use Bobbyshaw\WatsonVisualRecognition\Message\ClassifyRequest;
+use Bobbyshaw\WatsonVisualRecognition\Message\GetClassifiersRequest;
+use Bobbyshaw\WatsonVisualRecognition\Message\RequestInterface;
+use GuzzleHttp\ClientInterface as HttpClientInterface;
+use GuzzleHttp\Client as HttpClient;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * This is the primary library class which handles request to the IBM Watson Visual Recognition Service
@@ -12,221 +16,196 @@ use Bobbyshaw\WatsonVisualRecognition\Exceptions\AuthException;
  * @author Tom Robertshaw <me@tomrobertshaw.net>
  * @api
  */
-class Client
+class Client implements ClientInterface
 {
-    const ENDPOINT = 'https://gateway.watsonplatform.net/visual-recognition-beta/api/';
-    const CLASSIFIERS_PATH = 'classifiers/';
-    const CLASSIFY_PATH = 'classify/';
-    const ALLOWED_FILE_TYPES = ['.gif', '.jpg', '.png', '.zip'];
 
     /**
-     * IBM Watson Service Username
-     * @var String
-     */
-    private $username;
-
-    /**
-     * IBM Watson Service Password
+     * Request parameters
      *
-     * @var String
+     * @var \Symfony\Component\HttpFoundation\ParameterBag
      */
-    private $password;
+    protected $parameters;
 
     /**
-     * Major API Version
-     *
-     * @var string
+     * HTTP Client
+     * @var \GuzzleHttp\ClientInterface
      */
-    private $majorApiVersion;
-
-    /**
-     * API version Date
-     *
-     * @var string
-     */
-    private $version;
-
-    /**
-     * Guzzle HTTP Client for making requests
-     *
-     * @var GuzzleHttp\Client
-     */
-    private $client;
+    protected $httpClient;
 
     /**
      * Instantiate Visual Recognition client with API credentials
      *
      * @api
-     * @param array $config
-     *  - username - service credentials
-     *  - password - service credentials
-     *  - version_date - Date of API release that you wish to request from. Defaults to current date to get
-     *  latest version
-     *  - major_api_version - Major api release, Defaults to v2.
-     *
-     * @param array $config
-     * @param GuzzleHttp\Client|null $client
+     * @param HttpClientInterface|null $httpClient
      * @throws \Exception
      */
-    public function __construct(array $config = [], GuzzleHttp\Client $client = null)
+    public function __construct(HttpClientInterface $httpClient = null)
     {
-        $this->username = $config['username'];
-        $this->password = $config['password'];
-        $this->version = isset($config['version']) ? $config['version'] : date('Y-m-d');
-        $this->majorApiVersion = isset($config['major_api_version']) ? $config['major_api_version'] : 'v2';
-        $this->client = $client ?: new GuzzleHttp\Client();
-
-        if (!$this->username) {
-            throw new \Exception('username not set');
-        }
-
-        if (!$this->password) {
-            throw new \Exception('password not set');
-        }
+        $this->httpClient = $httpClient ?: $this->getDefaultHttpClient();
     }
 
     /**
+     * Get the global default HTTP client.
      *
+     * @return HttpClient
+     */
+    protected function getDefaultHttpClient()
+    {
+        return new HttpClient(
+            array(
+                'curl.options' => array(CURLOPT_CONNECTTIMEOUT => 60),
+            )
+        );
+    }
+
+    /**
+     * Initialize this client with default parameters
+     *
+     * @param  array $parameters
+     * @return $this
+     */
+    public function initialize(array $parameters = array())
+    {
+        $this->parameters = new ParameterBag;
+
+        // set default parameters
+        foreach ($this->getDefaultParameters() as $key => $value) {
+            $this->parameters->set($key, $value);
+        }
+
+        Helper::initialize($this, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Create new request object and initialize.
+     *
+     * @param $class
+     * @param array $parameters
+     * @return mixed
+     */
+    protected function createRequest($class, array $parameters)
+    {
+        /** @var RequestInterface $obj */
+        $obj = new $class($this->httpClient);
+
+        return $obj->initialize(array_replace($this->getParameters(), $parameters));
+    }
+
+    /**
+     * Default & required parameters for requests
+     *
+     */
+    public function getDefaultParameters()
+    {
+        return array(
+            'username' => '',
+            'password' => '',
+            'version' => '2015-12-02'
+        );
+    }
+
+    /**
+     * Get Parameters
+     *
+     * @return array
+     */
+    public function getParameters()
+    {
+        return $this->parameters->all();
+    }
+
+    /**
+     * Get Username
+     *
+     * @return mixed
+     */
+    public function getUsername()
+    {
+        return $this->parameters->get('username');
+    }
+
+    /**
+     * Set Username
+     *
+     * @param $value
+     * @return $this
+     */
+    public function setUsername($value)
+    {
+        $this->parameters->set('username', $value);
+
+        return $this;
+    }
+
+    /**
+     * Get password
+     *
+     * @return mixed
+     */
+    public function getPassword()
+    {
+        return $this->parameters->get('password');
+    }
+
+    /**
+     * Set Password
+     *
+     * @param $value
+     * @return $this
+     */
+    public function setPassword($value)
+    {
+        $this->parameters->set('password', $value);
+
+        return $this;
+    }
+
+    /**
+     * Get Version
+     *
+     * @return mixed
+     */
+    public function getVersion()
+    {
+        return $this->parameters->get('version');
+    }
+
+    /**
+     * Set version
+     *
+     * @param $value
+     * @return $this
+     */
+    public function setVersion($value)
+    {
+        $this->parameters->set('version', $value);
+
+        return $this;
+    }
+
+    /**
      * Get list of available classifiers
      *
      * @api
-     * @return Classifier[]
+     * @param array $parameters
+     * @return GetClassifiersRequest
      * @throws \Exception
      */
-    public function getClassifiers()
+    public function getClassifiers(array $parameters = [])
     {
-        try {
-            $response = $this->client->get($this->getApiUrl(static::CLASSIFIERS_PATH), [
-                'auth' => [$this->username, $this->password],
-                'query' => [
-                    'version' => $this->version,
-                ]
-            ]);
-
-            if ($response->getStatusCode() != 200) {
-                throw new \Exception($response->getBody()->getContents(), $response->getStatusCode());
-            }
-
-            $result = json_decode($response->getBody()->getContents());
-        } catch (GuzzleHttp\Exception\ClientException $e) {
-            if ($e->getCode() == 401) {
-                throw new AuthException('Invalid credentials provided');
-            } else {
-                throw $e;
-            }
-        }
-
-        $classifiers = [];
-
-        if (!$result->classifiers) {
-            throw new \Exception('No classifiers found');
-        }
-
-        foreach ($result->classifiers as $item) {
-            $classifiers[] = new Classifier($item->classifier_id, $item->name);
-        }
-
-        return $classifiers;
+        return $this->createRequest(GetClassifiersRequest::class, $parameters);
     }
 
     /**
-     * Classify an image or zip of images.
+     * Classify image
      *
-     * @param String $image - The image file path (.jpg, .png, .jpg) or compressed (.zip) file of images to classify.
-     * @param array|null $classifierIds - Array of classifiers IDs to restrict classification to.
-     * @return Image[] which also contains Classifier[]
-     * @throws \InvalidArgumentException if image is incorrect file format or if classifier IDs is not an array
-     * @throws \Exception if error is returned from
+     * @param array $parameters
+     * @return ClassifyRequest
      */
-    public function classify($image, $classifierIds = null)
+    public function classify(array $parameters = [])
     {
-        if (!in_array(substr($image, -4), static::ALLOWED_FILE_TYPES)) {
-            throw new \InvalidArgumentException(
-                'Image file needs to be one of the following types: ' . implode(', ', static::ALLOWED_FILE_TYPES)
-            );
-        }
-
-        $params = [
-            [
-                'name' => 'images_file',
-                'contents' => fopen($image, 'r'),
-                'filename' => $image
-            ]
-        ];
-
-        if (!is_null($classifierIds)) {
-            if (is_array($classifierIds)) {
-                $classifierIdParams = [];
-                foreach ($classifierIds as $id) {
-                    $classifierIdParams[] = ['classifier_id' => $id];
-                }
-
-                $params[] = [
-                    'name' => 'classifier_ids',
-                    'contents' => json_encode(['classifiers' => $classifierIdParams])
-                ];
-            } else {
-                throw new \InvalidArgumentException('Classifier IDs must be array');
-            }
-        }
-
-        try {
-            $response = $this->client->post($this->getApiUrl(static::CLASSIFY_PATH), [
-                'auth' => [$this->username, $this->password],
-                'multipart' => $params,
-                'query' => [
-                    'version' => $this->version,
-                ]
-            ]);
-
-            if ($response->getStatusCode() != 200) {
-                throw new \Exception($response->getBody()->getContents(), $response->getStatusCode());
-            }
-
-            $results = json_decode($response->getBody()->getContents());
-        } catch (GuzzleHttp\Exception\ClientException $e) {
-            if ($e->getCode() == 401) {
-                throw new AuthException('Invalid credentials provided');
-            } elseif ($e->getCode() == 415) {
-                throw new \InvalidArgumentException('Unsupported image type');
-            } else {
-                throw $e;
-            }
-        }
-
-        $images = [];
-
-        foreach ($results->images as $image) {
-            $classifiers = [];
-            foreach ($image->scores as $item) {
-                $classifiers[] = new Classifier($item->classifier_id, $item->name, $item->score);
-            }
-
-            $images[] = new Image($image->image, $classifiers);
-        }
-
-        return $images;
-    }
-
-    /**
-     * Get the watson API endpoint with version path
-     *
-     * @api
-     * @return string
-     */
-    public function getEndpoint()
-    {
-        return static::ENDPOINT . $this->majorApiVersion . '/';
-    }
-
-    /**
-     * Get full API URL f
-     *
-     * @param String $path of API needed
-     * @returns String of full URL
-     */
-    public function getApiUrl($path)
-    {
-        return $this->getEndpoint() . $path;
+        return $this->createRequest(ClassifyRequest::class, $parameters);
     }
 }

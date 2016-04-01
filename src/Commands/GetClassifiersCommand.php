@@ -2,13 +2,12 @@
 
 namespace Bobbyshaw\WatsonVisualRecognition\Commands;
 
-use Symfony\Component\Console\Command\Command;
+use Bobbyshaw\WatsonVisualRecognition\Message\ClassifiersResponse;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\Table;
-use Bobbyshaw\WatsonVisualRecognition\Client;
 use Bobbyshaw\WatsonVisualRecognition\Classifier;
 
 /**
@@ -17,7 +16,7 @@ use Bobbyshaw\WatsonVisualRecognition\Classifier;
  * @package Bobbyshaw\WatsonVisualRecognition\Commands
  * @author Tom Robertshaw <me@tomrobertshaw.net>
  */
-class GetClassifiersCommand extends Command
+class GetClassifiersCommand extends BaseCommand
 {
     /**
      * Configure command
@@ -36,12 +35,6 @@ class GetClassifiersCommand extends Command
                 'password',
                 InputArgument::REQUIRED,
                 'IBM Watson Service credentials password.'
-            )
-            ->addOption(
-                'major-api-version',
-                '-a',
-                InputOption::VALUE_REQUIRED,
-                'Major API version, defaults to v2'
             )
             ->addOption(
                 'version-date',
@@ -66,17 +59,18 @@ class GetClassifiersCommand extends Command
             'password' => $input->getArgument('password'),
         ];
 
-        if ($majorApiVerson = $input->getOption('major-api-version')) {
-            $config['major-api-version'] = $majorApiVerson;
-        }
-
         if ($version = $input->getOption('version-date')) {
             $config['version'] = $version;
         }
+        
+        $this->client->initialize($config);
 
-        $client = new Client($config);
+        $request = $this->client->getClassifiers();
 
-        $classifiers = $client->getClassifiers();
+        /** @var ClassifiersResponse $response */
+        $response = $request->send();
+
+        $classifiers = $response->getClassifiers();
 
         $tableRows = [];
         /** @var Classifier $classifier */

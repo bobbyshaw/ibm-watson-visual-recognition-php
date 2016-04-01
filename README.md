@@ -12,7 +12,9 @@ See [API documentation](https://www.ibm.com/smarterplanet/us/en/ibmwatson/develo
 
 The library also comes with a set of commands to use on the command line
 
-    php app/console classifiers:get [-a|--major-api-version="..."] [-d|--version-date="..."] username password
+    php app/console classifiers:get [-d|--version-date="..."] username password
+
+    php app/console classifiers:classify [-c|--classifiers="..."] [-d|--version-date="..."] username password images
 
 
 ## Development

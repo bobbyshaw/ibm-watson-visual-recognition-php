@@ -3,8 +3,7 @@
 namespace Bobbyshaw\WatsonVisualRecognition\Exceptions;
 
 /**
- * Thrown when invalid credentials are provided.
- *
+ * Class AuthException
  * @package Bobbyshaw\WatsonVisualRecognition\Exceptions
  */
 class AuthException extends \ErrorException

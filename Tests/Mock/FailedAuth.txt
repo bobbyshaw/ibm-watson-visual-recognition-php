@@ -1,0 +1,14 @@
+<HTML>
+    <HEAD>
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+        <TITLE>Watson Error</TITLE>
+    </HEAD>
+    <BODY>
+        <HR>
+        <p>Invalid access to resource - /visual-recognition-beta/api/v2/classify?version=2015-12-28</p>
+        <p>User access not Authorized.</p><p>Gateway Error Code : ERCD250-LDAP-DN-AUTHERR</p>
+        <p>Unable to communicate with Watson.</p>
+        <p>Request URL : /visual-recognition-beta/api/v2/classify?version=2015-12-28</p>
+        <p>Error Id :  csf_platform_prod_dp02-18916189</p><p>Date-Time : 2016-01-03T09:04:54-05:00</p>
+    </BODY>
+</HTML>
