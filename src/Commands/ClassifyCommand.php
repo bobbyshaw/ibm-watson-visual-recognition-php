@@ -3,11 +3,8 @@
 namespace Bobbyshaw\WatsonVisualRecognition\Commands;
 
 use Bobbyshaw\WatsonVisualRecognition\Classifier;
-use Bobbyshaw\WatsonVisualRecognition\Client;
 use Bobbyshaw\WatsonVisualRecognition\Image;
-use Bobbyshaw\WatsonVisualRecognition\Message\ClassifyRequest;
 use Bobbyshaw\WatsonVisualRecognition\Message\ClassifyResponse;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
