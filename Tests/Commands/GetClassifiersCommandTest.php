@@ -32,7 +32,7 @@ class GetClassifiersCommandTest extends Base
 
         $this->assertEquals('classifiers:get', $command->getName());
 
-        $correctOutput = file_get_contents('Tests/Mock/Commands/CLassifiersSuccess.txt');
+        $correctOutput = file_get_contents('Tests/Mock/Commands/ClassifiersSuccess.txt');
 
         $this->assertEquals($correctOutput, $output->fetch());
     }
