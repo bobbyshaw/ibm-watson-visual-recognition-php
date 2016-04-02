@@ -19,7 +19,9 @@ class ClassifyRequest extends AbstractRequest
     /**
      * Get parameters for classify request
      *
-     * @return array['images_file', 'classifier_ids']
+     * @return array
+     *
+     * ['images_file', 'classifier_ids']
      *
      */
     public function getData()

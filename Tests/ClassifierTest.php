@@ -13,27 +13,27 @@ class ClassifierTest extends Base
     /** @var Classifier */
     private $classifier;
 
-    private $id;
-    private $name;
-    private $score;
+    private $classifierId = '1';
+    private $classifierName = 'test';
+    private $classifierScore = 0.9;
 
     public function setUp()
     {
-        $this->classifier = new Classifier($this->id, $this->name, $this->score);
+        $this->classifier = new Classifier($this->classifierId, $this->classifierName, $this->classifierScore);
     }
 
     public function testGetId()
     {
-        $this->assertEquals($this->id, $this->classifier->getId());
+        $this->assertEquals($this->classifierId, $this->classifier->getId());
     }
 
     public function testGetName()
     {
-        $this->assertEquals($this->name, $this->classifier->getName());
+        $this->assertEquals($this->classifierName, $this->classifier->getName());
     }
 
     public function testGetScore()
     {
-        $this->assertEquals($this->score, $this->classifier->getScore());
+        $this->assertEquals($this->classifierScore, $this->classifier->getScore());
     }
 }

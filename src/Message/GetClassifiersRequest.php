@@ -13,6 +13,17 @@ use GuzzleHttp\Psr7\Request;
 class GetClassifiersRequest extends AbstractRequest
 {
     const CLASSIFIERS_PATH = 'classifiers/';
+    
+    public function getData()
+    {
+        $data = parent::getData();
+
+        if ($verbose = $this->getVerbose()) {
+            $data['verbose'] = $verbose;
+        }
+
+        return $data;
+    }
 
     /**
      * Send HTTP request to get list of classifiers
@@ -23,9 +34,15 @@ class GetClassifiersRequest extends AbstractRequest
      */
     public function sendData($data)
     {
+        $query = ['version' => $data['version']];
+
+        if (isset($data['verbose'])) {
+            $query['verbose'] = $data['verbose'];
+        }
+
         $request = new Request(
             'GET',
-            $this->getApiUrl(static::CLASSIFIERS_PATH) . '?' . http_build_query(['version' => $data['version']]),
+            $this->getApiUrl(static::CLASSIFIERS_PATH) . '?' . http_build_query($query),
             ['Authorization' => 'Basic ' . base64_encode($data['username'] . ':' . $data['password'])]
         );
 

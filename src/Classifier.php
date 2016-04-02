@@ -2,6 +2,8 @@
 
 namespace Bobbyshaw\WatsonVisualRecognition;
 
+use \DateTime;
+
 /**
  * This class formalises information about a classifier.
  *
@@ -29,17 +31,34 @@ class Classifier
     private $score;
 
     /**
+     * Classifier Owner/Creator
+     * @var string
+     */
+    private $owner;
+
+    /**
+     * Classifier Creation Date
+     *
+     * @var \DateTime
+     */
+    private $created;
+
+    /**
      * Classifier constructor.
      *
      * @param string $id
      * @param string $name
      * @param float|null $score
+     * @param string|null $owner
+     * @param DateTime|null $created
      */
-    public function __construct($id, $name, $score = null)
+    public function __construct($id, $name, $score = null, $owner = null, $created = null)
     {
         $this->id = $id;
         $this->name = $name;
         $this->score = $score;
+        $this->owner = $owner;
+        $this->created = $created;
     }
 
     /**
@@ -65,10 +84,30 @@ class Classifier
     /**
      * Get classification score.
      *
-     * @return float
+     * @return float|null
      */
     public function getScore()
     {
         return $this->score;
+    }
+
+    /**
+     * Get Owner
+     *
+     * @return null|string
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * Get Creation Date
+     *
+     * @return DateTime|null
+     */
+    public function getCreated()
+    {
+        return $this->created;
     }
 }

@@ -25,7 +25,7 @@ class ClassifyResponse extends Response
      */
     public function getImages()
     {
-        if (!$this->images) {
+        if (empty($this->images)) {
             $images = [];
             foreach ($this->data->images as $image) {
                 $classifiers = [];

@@ -3,6 +3,7 @@
 namespace Bobbyshaw\WatsonVisualRecognition\Message;
 
 use Bobbyshaw\WatsonVisualRecognition\Classifier;
+use DateTime;
 
 /**
  * Class ClassifiersResponse
@@ -26,7 +27,10 @@ class ClassifiersResponse extends Response
             $classifiers = array();
 
             foreach ($this->data->classifiers as $classifier) {
-                $classifiers[] = new Classifier($classifier->classifier_id, $classifier->name);
+                $owner = isset($classifier->owner) ? $classifier->owner : null;
+                $created = isset($classifier->created) ? new DateTime($classifier->created): null;
+
+                $classifiers[] = new Classifier($classifier->classifier_id, $classifier->name, null, $owner, $created);
             }
 
             $this->classifiers = $classifiers;

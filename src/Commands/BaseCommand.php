@@ -30,7 +30,7 @@ abstract class BaseCommand extends Command
     }
 
     /**
-     * @return Client
+     * @return ClientInterface
      */
     public function getDefaultClient()
     {
@@ -38,7 +38,7 @@ abstract class BaseCommand extends Command
     }
 
     /**
-     * @return Client|ClientInterface
+     * @return ClientInterface
      */
     public function getClient()
     {

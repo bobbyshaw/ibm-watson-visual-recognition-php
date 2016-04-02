@@ -18,7 +18,6 @@ use Bobbyshaw\WatsonVisualRecognition\Helper;
  *
  * @package Bobbyshaw\WatsonVisualRecognition\Message
  */
-
 abstract class AbstractRequest implements RequestInterface
 {
     const ENDPOINT = 'https://gateway.watsonplatform.net/visual-recognition-beta/api/v2/';
@@ -48,7 +47,7 @@ abstract class AbstractRequest implements RequestInterface
     /**
      * Create a new Request
      *
-     * @param ClientInterface $httpClient  A Guzzle client to make API calls with
+     * @param ClientInterface $httpClient A Guzzle client to make API calls with
      */
     public function __construct(ClientInterface $httpClient)
     {
@@ -142,7 +141,7 @@ abstract class AbstractRequest implements RequestInterface
     /**
      * Get Username
      *
-     * @return mixed
+     * @return string
      */
     public function getUsername()
     {
@@ -152,7 +151,7 @@ abstract class AbstractRequest implements RequestInterface
     /**
      * Set Username
      *
-     * @param $value
+     * @param string $value
      * @return $this
      */
     public function setUsername($value)
@@ -165,7 +164,7 @@ abstract class AbstractRequest implements RequestInterface
     /**
      * Get password
      *
-     * @return mixed
+     * @return string
      */
     public function getPassword()
     {
@@ -175,7 +174,7 @@ abstract class AbstractRequest implements RequestInterface
     /**
      * Set Password
      *
-     * @param $value
+     * @param string $value
      * @return $this
      */
     public function setPassword($value)
@@ -188,7 +187,7 @@ abstract class AbstractRequest implements RequestInterface
     /**
      * Get Version
      *
-     * @return mixed
+     * @return string
      */
     public function getVersion()
     {
@@ -196,9 +195,30 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Set verbose parameter
+     *
+     * @return string
+     */
+    public function getVerbose()
+    {
+        return $this->getParameter('verbose');
+    }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setVerbose($value)
+    {
+        $this->setParameter('verbose', $value);
+
+        return $this;
+    }
+
+    /**
      * Get image file.
      *
-     * @return mixed
+     * @return string
      */
     public function getImagesFile()
     {
@@ -208,8 +228,8 @@ abstract class AbstractRequest implements RequestInterface
     /**
      * Set Image file
      *
-     * @param $value
-     * @return AbstractRequest
+     * @param string $value
+     * @return $this
      */
     public function setImagesFile($value)
     {
@@ -221,7 +241,7 @@ abstract class AbstractRequest implements RequestInterface
     /**
      * Get Classifier Ids
      *
-     * @return mixed
+     * @return string[]
      */
     public function getClassifierIds()
     {
@@ -231,12 +251,35 @@ abstract class AbstractRequest implements RequestInterface
     /**
      * Set Classifier Ids
      *
-     * @param $value
+     * @param string[] $value
      * @return $this
      */
     public function setClassifierIds($value)
     {
         $this->setParameter('classifier_ids', $value);
+
+        return $this;
+    }
+
+    /**
+     * Get Classifier ID
+     *
+     * @return String
+     */
+    public function getClassifierId()
+    {
+        return $this->getParameter('classifier_id');
+    }
+
+    /**
+     * Set Classifier ID
+     *
+     * @param String $value
+     * @return $this
+     */
+    public function setClassifierId($value)
+    {
+        $this->setParameter('classifier_id', $value);
 
         return $this;
     }
@@ -272,7 +315,7 @@ abstract class AbstractRequest implements RequestInterface
         return [
             'username' => $this->getUsername(),
             'password' => $this->getPassword(),
-            'version'  => $this->getVersion()
+            'version' => $this->getVersion()
         ];
     }
 

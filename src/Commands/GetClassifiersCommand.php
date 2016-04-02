@@ -37,6 +37,12 @@ class GetClassifiersCommand extends BaseCommand
                 'IBM Watson Service credentials password.'
             )
             ->addOption(
+                'api-verbose',
+                '-a',
+                InputOption::VALUE_NONE,
+                'Enable verbose API request'
+            )
+            ->addOption(
                 'version-date',
                 '-d',
                 InputOption::VALUE_REQUIRED,
@@ -62,10 +68,14 @@ class GetClassifiersCommand extends BaseCommand
         if ($version = $input->getOption('version-date')) {
             $config['version'] = $version;
         }
-        
+
         $this->client->initialize($config);
 
-        $request = $this->client->getClassifiers();
+        $params = [];
+        if ($verbose = $input->getOption('api-verbose')) {
+            $params['verbose'] = $verbose;
+        }
+        $request = $this->client->getClassifiers($params);
 
         /** @var ClassifiersResponse $response */
         $response = $request->send();
@@ -75,10 +85,20 @@ class GetClassifiersCommand extends BaseCommand
         $tableRows = [];
         /** @var Classifier $classifier */
         foreach ($classifiers as $classifier) {
-            $tableRows[] = [$classifier->getId(), $classifier->getName()];
+            $row = [$classifier->getId(), $classifier->getName()];
+            if ($verbose) {
+                $row = array_merge($row, [$classifier->getOwner(), $classifier->getCreated()->format('Y-m-d H:i:s')]);
+            }
+
+            $tableRows[] = $row;
+        }
+
+        $headers = ['ID', 'Name'];
+        if ($verbose) {
+            $headers = array_merge($headers, ['Owner', 'Created At']);
         }
 
         $table = new Table($output);
-        $table->setHeaders(['ID', 'Name'])->setRows($tableRows)->render();
+        $table->setHeaders($headers)->setRows($tableRows)->render();
     }
 }

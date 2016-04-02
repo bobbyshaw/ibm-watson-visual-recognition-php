@@ -46,7 +46,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
     /**
      * Get Guzzle with mock response and request history stored in container
      *
-     * @param [] $container
+     * @param array $container
      * @param Response[] $responses
      * @return Client
      */

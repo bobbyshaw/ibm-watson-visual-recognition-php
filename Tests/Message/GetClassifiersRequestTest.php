@@ -3,6 +3,7 @@
 namespace Bobbyshaw\WatsonVisualRecognition\Tests\Message;
 
 use Bobbyshaw\WatsonVisualRecognition\Client;
+use Bobbyshaw\WatsonVisualRecognition\Message\ClassifiersResponse;
 use Bobbyshaw\WatsonVisualRecognition\Message\GetClassifiersRequest;
 use Bobbyshaw\WatsonVisualRecognition\Tests\Base;
 use GuzzleHttp\Client as GuzzleClient;
@@ -66,7 +67,7 @@ class GetClassifiersRequestTest extends Base
         $classifiersRequest = $this->client->getClassifiers();
 
         $response = $classifiersRequest->send();
-        $classifiers = $response->getClassifiers();
+        $response->getClassifiers();
 
 
         // One request should be sent
@@ -118,5 +119,37 @@ class GetClassifiersRequestTest extends Base
         /** @var GetClassifiersRequest $request */
         $request = $this->client->getClassifiers();
         $request->send();
+    }
+
+    public function testGetClassifiersVerbose()
+    {
+        $container = [];
+        $guzzle = $this->getMockHttpClientWithHistoryAndResponses(
+            $container,
+            [$this->getMockHttpResponse('GetClassifiersSuccess.txt')]
+        );
+
+        $this->client = new Client($guzzle);
+        $this->client->initialize(['username' => $this->username, 'password' => $this->password]);
+
+        /** @var GetClassifiersRequest $request */
+        $classifiersRequest = $this->client->getClassifiers(['verbose' => 'true']);
+
+        /** @var ClassifiersResponse $response */
+        $response = $classifiersRequest->send();
+        $response->getClassifiers();
+
+        $transaction = $container[0];
+
+        /** @var Request $request */
+        $request = $transaction['request'];
+
+        /** @var Uri $uri */
+        $uri = $request->getUri();
+
+        // Check verbose query parameter
+        $query = \GuzzleHttp\Psr7\parse_query($uri->getQuery());
+
+        $this->assertArrayHasKey('verbose', $query);
     }
 }

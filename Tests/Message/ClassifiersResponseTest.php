@@ -50,4 +50,27 @@ class ClassifiersResponseTest extends Base
             $this->assertContains($classifier->getName(), $this->classifiers);
         }
     }
+
+    /**
+     * Test versbose response
+     */
+    public function testVerbose()
+    {
+        /** @var RequestInterface $httpRequest */
+        $httpRequest = $this->getMockForAbstractClass(RequestInterface::class);
+        $httpResponse = $this->getMockHttpResponse('GetClassifiersVerbose.txt');
+
+        $response = new ClassifiersResponse($httpRequest, $httpResponse->getBody());
+
+        $classifiers = $response->getClassifiers();
+
+        $this->assertTrue($response->isSuccessful());
+        $this->assertCount(713, $classifiers);
+
+        foreach ($classifiers as $classifier) {
+            $this->assertInstanceOf(Classifier::class, $classifier);
+            $this->assertInstanceOf(\DateTime::class, $classifier->getCreated());
+            $this->assertEquals('IBM', $classifier->getOwner());
+        }
+    }
 }

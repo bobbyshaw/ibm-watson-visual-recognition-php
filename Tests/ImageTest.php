@@ -17,18 +17,18 @@ class ImageTest extends Base
     /** @var Classifier[] */
     private $classifiers;
 
-    private $name;
+    private $imageName = 'parrot';
 
 
     public function setUp()
     {
         $this->classifiers = [new Classifier('test', 'test', 'test')];
-        $this->image = new Image($this->name, $this->classifiers);
+        $this->image = new Image($this->imageName, $this->classifiers);
     }
 
     public function testGetName()
     {
-        $this->assertEquals($this->name, $this->image->getName());
+        $this->assertEquals($this->imageName, $this->image->getName());
     }
 
     public function testGetClassifiers()

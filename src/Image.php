@@ -17,8 +17,8 @@ class Image
     private $name;
 
     /**
-     * Classidiers
-     * @var double
+     * Classifiers
+     * @var Classifier[]
      */
     private $classifiers;
 
@@ -57,7 +57,7 @@ class Image
     /**
      * Get classifier by ID
      * @param String $id Classifier ID
-     * @return Classifier
+     * @return bool|Classifier
      */
     public function getClassifier($id)
     {
