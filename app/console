@@ -14,9 +14,11 @@
     use Symfony\Component\Console\Application;
     use Bobbyshaw\WatsonVisualRecognition\Commands\ClassifyCommand;
     use Bobbyshaw\WatsonVisualRecognition\Commands\GetClassifiersCommand;
+    use Bobbyshaw\WatsonVisualRecognition\Commands\GetClassifierCommand;
 
     $app = new Application();
     $app->add(new ClassifyCommand());
     $app->add(new GetClassifiersCommand());
+    $app->add(new GetClassifierCommand());
     $app->run();
 ?>

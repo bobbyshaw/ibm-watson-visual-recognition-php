@@ -36,4 +36,29 @@ class GetClassifiersCommandTest extends Base
 
         $this->assertEquals($correctOutput, $output->fetch());
     }
+
+    public function testVerboseCommand()
+    {
+        $container = [];
+        $response = $this->getMockHttpResponse('GetClassifiersVerbose.txt');
+        $httpClient = $this->getMockHttpClientWithHistoryAndResponses($container, [$response]);
+
+        $arguments = [
+            'username' => 'test',
+            'password' => 'test',
+            '--version-date' => '2016-01-01',
+            '--api-verbose'  => 'true'
+        ];
+        $input = new ArrayInput($arguments);
+        $output = new BufferedOutput();
+
+        $command = new GetClassifiersCommand(null, new Client($httpClient));
+        $command->run($input, $output);
+
+        $this->assertEquals('classifiers:get', $command->getName());
+
+        $correctOutput = file_get_contents('Tests/Mock/Commands/ClassifiersVerboseSuccess.txt');
+
+        $this->assertEquals($correctOutput, $output->fetch());
+    }
 }

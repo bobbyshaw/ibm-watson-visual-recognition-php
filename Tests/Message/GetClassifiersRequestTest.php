@@ -6,10 +6,6 @@ use Bobbyshaw\WatsonVisualRecognition\Client;
 use Bobbyshaw\WatsonVisualRecognition\Message\ClassifiersResponse;
 use Bobbyshaw\WatsonVisualRecognition\Message\GetClassifiersRequest;
 use Bobbyshaw\WatsonVisualRecognition\Tests\Base;
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 
