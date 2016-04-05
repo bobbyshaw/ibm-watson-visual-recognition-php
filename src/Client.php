@@ -3,6 +3,7 @@
 namespace Bobbyshaw\WatsonVisualRecognition;
 
 use Bobbyshaw\WatsonVisualRecognition\Message\ClassifyRequest;
+use Bobbyshaw\WatsonVisualRecognition\Message\CreateClassifierRequest;
 use Bobbyshaw\WatsonVisualRecognition\Message\GetClassifierRequest;
 use Bobbyshaw\WatsonVisualRecognition\Message\GetClassifiersRequest;
 use Bobbyshaw\WatsonVisualRecognition\Message\RequestInterface;
@@ -219,5 +220,16 @@ class Client implements ClientInterface
     public function classify(array $parameters = [])
     {
         return $this->createRequest(ClassifyRequest::class, $parameters);
+    }
+
+    /**
+     * Train a new classifier
+     *
+     * @param array $parameters
+     * @return mixed
+     */
+    public function createClassifier(array $parameters = [])
+    {
+        return $this->createRequest(CreateClassifierRequest::class, $parameters);
     }
 }

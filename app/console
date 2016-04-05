@@ -15,10 +15,13 @@
     use Bobbyshaw\WatsonVisualRecognition\Commands\ClassifyCommand;
     use Bobbyshaw\WatsonVisualRecognition\Commands\GetClassifiersCommand;
     use Bobbyshaw\WatsonVisualRecognition\Commands\GetClassifierCommand;
+    use Bobbyshaw\WatsonVisualRecognition\Commands\CreateClassifierCommand;
 
     $app = new Application();
     $app->add(new ClassifyCommand());
     $app->add(new GetClassifiersCommand());
     $app->add(new GetClassifierCommand());
+    $app->add(new CreateClassifierCommand());
+
     $app->run();
 ?>

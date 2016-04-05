@@ -1,0 +1,6 @@
+{
+  "name" : "butterfly",
+  "classifier_id" : "butterfly_1691439307",
+  "created" : "2016-04-05T20:36:29.000Z",
+  "owner" : "d2bde0da-7d04-4ecb-ad86-ead11c3e6293-eu-gb"
+}

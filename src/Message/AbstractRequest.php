@@ -195,6 +195,19 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Set version
+     *
+     * @param $value
+     * @return $this
+     */
+    public function setVersion($value)
+    {
+        $this->setParameter('version', $value);
+
+        return $this;
+    }
+
+    /**
      * Set verbose parameter
      *
      * @return string
@@ -285,24 +298,72 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
-     * Set version
+     * Get positive examples zip file path
      *
-     * @param $value
+     * @return string
+     */
+    public function getPositiveExamples()
+    {
+        return $this->getParameter('positive_examples');
+    }
+
+    /**
+     * Set file path of positive examples
+     *
+     * @param string $value
      * @return $this
      */
-    public function setVersion($value)
+    public function setPositiveExamples($value)
     {
-        $this->setParameter('version', $value);
+        $this->setParameter('positive_examples', $value);
 
         return $this;
     }
 
+    /**
+     * Get negative examples zip file path
+     *
+     * @return string
+     */
+    public function getNegativeExamples()
+    {
+        return $this->getParameter('negative_examples');
+    }
 
     /**
-     * Configure command is run before every request is sent
+     * Set file path of negative examples
+     *
+     * @param string $value
+     * @return $this
      */
-    public function configure()
+    public function setNegativeExamples($value)
     {
+        $this->setParameter('negative_examples', $value);
+
+        return $this;
+    }
+
+    /**
+     * Get classifier name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getParameter('name');
+    }
+
+    /**
+     * Set classifier name
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setName($value)
+    {
+        $this->setParameter('name', $value);
+
+        return $this;
     }
 
     /**
@@ -327,8 +388,6 @@ abstract class AbstractRequest implements RequestInterface
      */
     public function send()
     {
-        $this->configure();
-
         $data = $this->getData();
 
         return $this->sendData($data);

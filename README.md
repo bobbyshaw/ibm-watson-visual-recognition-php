@@ -27,6 +27,9 @@ Run phpunit tests with
     vendor/bin/phpunit
     
     
+Test images are provided by [Pixabay](https://pixabay.com/).
+    
+    
 ## Documentation
 
 PHPDocumentor is being used for creating library documentation.  So make sure to add function comments 
