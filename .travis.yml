@@ -1,8 +1,8 @@
 language: php
 
 addons:
-    code_climate:
-            repo_token: b31faff683ba4c5181b75c762884b384ced325ff50739c832908bde60a5b0929
+  code_climate:
+    repo_token: b31faff683ba4c5181b75c762884b384ced325ff50739c832908bde60a5b0929
 
 php:
   - 5.6
@@ -20,4 +20,9 @@ before_install:
 install:
   - composer install
 
-script: vendor/bin/grumphp run
+script: 
+  - vendor/bin/grumphp run
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage/clover/coverage.xml
