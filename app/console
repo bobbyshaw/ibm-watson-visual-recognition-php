@@ -1,0 +1,29 @@
+#!/usr/bin/env php
+<?php
+
+    // set to run indefinitely if needed
+    set_time_limit(0);
+
+    /* Optional. It’s better to do it in the php.ini file */
+    date_default_timezone_set('Europe/London');
+
+    // include the composer autoloader
+    require_once __DIR__ . '/../vendor/autoload.php';
+
+    // import the Symfony Console Application
+    use Symfony\Component\Console\Application;
+    use Bobbyshaw\WatsonVisualRecognition\Commands\ClassifyCommand;
+    use Bobbyshaw\WatsonVisualRecognition\Commands\GetClassifiersCommand;
+    use Bobbyshaw\WatsonVisualRecognition\Commands\GetClassifierCommand;
+    use Bobbyshaw\WatsonVisualRecognition\Commands\CreateClassifierCommand;
+    use Bobbyshaw\WatsonVisualRecognition\Commands\DeleteClassifierCommand;
+
+    $app = new Application();
+    $app->add(new ClassifyCommand());
+    $app->add(new GetClassifiersCommand());
+    $app->add(new GetClassifierCommand());
+    $app->add(new CreateClassifierCommand());
+    $app->add(new DeleteClassifierCommand());
+
+    $app->run();
+?>

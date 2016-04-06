@@ -1,0 +1,52 @@
++------------------------------+------------------------+-------------------+------------------+
+| Image                        | Classifier ID          | Classifier Name   | Classifier Score |
++------------------------------+------------------------+-------------------+------------------+
+| cosmos-flower-433424_640.jpg | photo_1572731175       | photo             | 0.977085         |
+| cosmos-flower-433424_640.jpg | Flower_Scene           | Flower_Scene      | 0.95209          |
+| cosmos-flower-433424_640.jpg | Butterfly              | Butterfly         | 0.944176         |
+| cosmos-flower-433424_640.jpg | Picket_Fence           | Picket_Fence      | 0.9337           |
+| cosmos-flower-433424_640.jpg | Flower                 | Flower            | 0.920754         |
+| cosmos-flower-433424_640.jpg | bright_496607388       | bright            | 0.802895         |
+| cosmos-flower-433424_640.jpg | Insect                 | Insect            | 0.794121         |
+| cosmos-flower-433424_640.jpg | Florist_Shop           | Florist_Shop      | 0.77871          |
+| cosmos-flower-433424_640.jpg | living_room_1007650764 | living_room       | 0.762884         |
+| cosmos-flower-433424_640.jpg | Violet                 | Violet            | 0.742166         |
+| cosmos-flower-433424_640.jpg | watermarked_2070418028 | watermarked       | 0.730441         |
+| cosmos-flower-433424_640.jpg | inside_402842804       | inside            | 0.726787         |
+| cosmos-flower-433424_640.jpg | Aquarium               | Aquarium          | 0.718092         |
+| cosmos-flower-433424_640.jpg | Ballooning             | Ballooning        | 0.682508         |
+| cosmos-flower-433424_640.jpg | Arthropod              | Arthropod         | 0.666463         |
+| cosmos-flower-433424_640.jpg | swimmingpool_109438771 | swimming-pool     | 0.64458          |
+| cosmos-flower-433424_640.jpg | Invertebrate           | Invertebrate      | 0.611732         |
+| cosmos-flower-433424_640.jpg | blurry_786219730       | blurry            | 0.607374         |
+| cosmos-flower-433424_640.jpg | Shoes                  | Shoes             | 0.591003         |
+| cosmos-flower-433424_640.jpg | sea_524758387          | sea               | 0.580761         |
+| cosmos-flower-433424_640.jpg | Graduation             | Graduation        | 0.575249         |
+| cosmos-flower-433424_640.jpg | blue_sky_2056231781    | blue_sky          | 0.572037         |
+| cosmos-flower-433424_640.jpg | Popcorn                | Popcorn           | 0.503871         |
+| hummingbird-1047836_640.jpg  | Hummingbird            | Hummingbird       | 0.942612         |
+| hummingbird-1047836_640.jpg  | bright_496607388       | bright            | 0.861165         |
+| hummingbird-1047836_640.jpg  | Cormorant              | Cormorant         | 0.825468         |
+| hummingbird-1047836_640.jpg  | blurry_786219730       | blurry            | 0.743521         |
+| hummingbird-1047836_640.jpg  | blue_sky_2056231781    | blue_sky          | 0.734137         |
+| hummingbird-1047836_640.jpg  | Blue                   | Blue              | 0.710792         |
+| hummingbird-1047836_640.jpg  | Military_Plane         | Military_Plane    | 0.691945         |
+| hummingbird-1047836_640.jpg  | Statue_of_Liberty      | Statue_of_Liberty | 0.681937         |
+| hummingbird-1047836_640.jpg  | Fish                   | Fish              | 0.680195         |
+| hummingbird-1047836_640.jpg  | Rainbow                | Rainbow           | 0.674284         |
+| hummingbird-1047836_640.jpg  | White                  | White             | 0.670417         |
+| hummingbird-1047836_640.jpg  | watermarked_2070418028 | watermarked       | 0.655196         |
+| hummingbird-1047836_640.jpg  | sea_524758387          | sea               | 0.578008         |
+| hummingbird-1047836_640.jpg  | Red                    | Red               | 0.575055         |
+| hummingbird-1047836_640.jpg  | Hang_Gliding           | Hang_Gliding      | 0.555686         |
+| hummingbird-1047836_640.jpg  | Crevasse               | Crevasse          | 0.555209         |
+| hummingbird-1047836_640.jpg  | Frost                  | Frost             | 0.549516         |
+| hummingbird-1047836_640.jpg  | Air_Sport              | Air_Sport         | 0.535081         |
+| hummingbird-1047836_640.jpg  | Bird                   | Bird              | 0.534952         |
+| hummingbird-1047836_640.jpg  | Vertebrate             | Vertebrate        | 0.529091         |
+| hummingbird-1047836_640.jpg  | Animal                 | Animal            | 0.526171         |
+| hummingbird-1047836_640.jpg  | Capitol                | Capitol           | 0.517652         |
+| hummingbird-1047836_640.jpg  | Ice_Scene              | Ice_Scene         | 0.509699         |
+| hummingbird-1047836_640.jpg  | Ski_Jumping            | Ski_Jumping       | 0.509371         |
+| hummingbird-1047836_640.jpg  | photo_1114291327       | photo             | 0.509368         |
++------------------------------+------------------------+-------------------+------------------+

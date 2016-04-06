@@ -1,0 +1,15 @@
+{ "classifiers":[
+                {"classifier_id":"Black","name":"Black"},
+                {"classifier_id":"Blue","name":"Blue"},
+                {"classifier_id":"Brown","name":"Brown"},
+                {"classifier_id":"Cyan","name":"Cyan"},
+                {"classifier_id":"Green","name":"Green"},
+                {"classifier_id":"Magenta","name":"Magenta"},
+                {"classifier_id":"Mixed_Color","name":"Mixed_Color"},
+                {"classifier_id":"Orange","name":"Orange"},
+                {"classifier_id":"Red","name":"Red"},
+                {"classifier_id":"Violet","name":"Violet"},
+                {"classifier_id":"White","name":"White"},
+                {"classifier_id":"Yellow","name":"Yellow"},
+                {"classifier_id":"Black_and_white","name":"Black_and_white"},
+                {"classifier_id":"Color","name":"Color"}]}
