@@ -36,7 +36,8 @@ abstract class BaseCommand extends Command
      */
     protected function configure()
     {
-        $this->addArgument(
+        $this
+            ->addArgument(
                 'username',
                 InputArgument::REQUIRED,
                 'IBM Watson Service credentials username.'
