@@ -90,8 +90,7 @@ class ClassifyRequest extends AbstractRequest
             $response = $this->httpClient->send($request);
 
             if ($response->getStatusCode() != 200) {
-                $error = $response->getStatusCode() . " Response Received: " . $response->getBody()->getContents();
-                throw new \Exception($error, $response->getStatusCode());
+                throw new \Exception($response->getBody()->getContents(), $response->getStatusCode());
             }
         } catch (ClientException $e) {
             if ($e->getCode() == 401) {

@@ -2,10 +2,12 @@
 
 namespace Bobbyshaw\WatsonVisualRecognition\Tests\Message;
 
+use Bobbyshaw\WatsonVisualRecognition\Client;
 use Bobbyshaw\WatsonVisualRecognition\Message\ClassifyRequest;
 use Bobbyshaw\WatsonVisualRecognition\Message\RequestInterface;
 use Bobbyshaw\WatsonVisualRecognition\Tests\Base;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 
 /**
  * Class ClassifyRequestTest
@@ -85,5 +87,60 @@ class ClassifyRequestTest extends Base
 
         $classifierIdsData = "{\"classifiers\":[{\"classifier_id\":1},{\"classifier_id\":2},{\"classifier_id\":3}]}";
         $this->assertContains($classifierIdsData, $body);
+    }
+
+    /**
+     * Check that exception is thrown if incorrect file type provided
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testDisallowedFileType()
+    {
+        $request = $this->getMockHttpResponse('ClassifySuccess.txt');
+        $httpClient = $this->getMockHttpClientWithHistoryAndResponses($this->container, [$request]);
+
+        $this->request = new ClassifyRequest($httpClient);
+
+        $this->request->initialize(['images_file' => 'Tests/images/hummingbird-1047836_640.tom']);
+
+        $this->request->send();
+    }
+
+    /**
+     * Test getClassifiers failed auth is handled appropriately
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testIncorrectFileApiResponse()
+    {
+        $container = [];
+        $response = new Response(415, [], '{"code":415,"error":"Unsupported image type"}');
+        $httpClient = $this->getMockHttpClientWithHistoryAndResponses($container, [$response]);
+
+        $client = new Client($httpClient);
+        $client->initialize(['username' => 'test', 'password' => 'test']);
+
+        /** @var ClassifyRequest $request */
+        $request = $client->classify(['images_file' => 'Tests/images/hummingbird-1047836_640.jpg']);
+        $request->send();
+    }
+
+    /**
+     * Test failed auth is handled appropriately
+     *
+     * @expectedException \Bobbyshaw\WatsonVisualRecognition\Exceptions\AuthException
+     */
+    public function testFailedAuth()
+    {
+        $container = [];
+        $response = $this->getMockHttpResponse('FailedAuth.txt', 401);
+        $httpClient = $this->getMockHttpClientWithHistoryAndResponses($container, [$response]);
+
+        $client = new Client($httpClient);
+        $client->initialize(['username' => 'test', 'password' => 'test']);
+
+        /** @var ClassifyRequest $request */
+        $request = $client->classify(['images_file' => 'Tests/images/hummingbird-1047836_640.jpg']);
+        $request->send();
     }
 }
