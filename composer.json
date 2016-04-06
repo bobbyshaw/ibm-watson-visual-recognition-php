@@ -1,10 +1,10 @@
 {
-    "name": "bobbyshaw/watson-visual-recognition",
+    "name": "bobbyshaw/ibm-watson-visual-recognition",
     "type": "library",
-    "description": "A php library to provide API calls & handle authentication with the Bluemix visual recognition",
+    "description": "A PHP library to provide API calls & handle authentication with the IBM Watson Visual Recognition",
     "license": "Apache-2.0",
     "keywords": ["ibm" ,"watson", "bluemix", "visual recognition"],
-    "homepage": "https://github.com/bobbyshaw/watson-visual-recognition-php",
+    "homepage": "https://github.com/bobbyshaw/ibm-watson-visual-recognition-php",
     "authors": [
         {
             "name": "Tom Robertshaw",
