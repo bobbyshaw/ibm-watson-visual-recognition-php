@@ -21,7 +21,7 @@ before_install:
   - export COMPOSER_ROOT_VERSION=dev-master
 
 install:
-  - composer install
+  - composer install --prefer-dist
 
 script: 
   - vendor/bin/grumphp run
