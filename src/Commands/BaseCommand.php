@@ -15,7 +15,7 @@ use Symfony\Component\Console\Input\InputOption;
 abstract class BaseCommand extends Command
 {
 
-    /** @var Client|ClientInterface  */
+    /** @var ClientInterface  */
     protected $client;
 
     /**
