@@ -4,6 +4,7 @@ namespace Bobbyshaw\WatsonVisualRecognition;
 
 use Bobbyshaw\WatsonVisualRecognition\Message\ClassifyRequest;
 use Bobbyshaw\WatsonVisualRecognition\Message\CreateClassifierRequest;
+use Bobbyshaw\WatsonVisualRecognition\Message\DeleteClassifierRequest;
 use Bobbyshaw\WatsonVisualRecognition\Message\GetClassifierRequest;
 use Bobbyshaw\WatsonVisualRecognition\Message\GetClassifiersRequest;
 use Bobbyshaw\WatsonVisualRecognition\Message\RequestInterface;
@@ -231,5 +232,16 @@ class Client implements ClientInterface
     public function createClassifier(array $parameters = [])
     {
         return $this->createRequest(CreateClassifierRequest::class, $parameters);
+    }
+
+    /**
+     * Delete a classifier
+     *
+     * @param array $parameters
+     * @return mixed
+     */
+    public function deleteClassifier(array $parameters = [])
+    {
+        return $this->createRequest(DeleteClassifierRequest::class, $parameters);
     }
 }

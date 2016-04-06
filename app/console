@@ -16,12 +16,14 @@
     use Bobbyshaw\WatsonVisualRecognition\Commands\GetClassifiersCommand;
     use Bobbyshaw\WatsonVisualRecognition\Commands\GetClassifierCommand;
     use Bobbyshaw\WatsonVisualRecognition\Commands\CreateClassifierCommand;
+    use Bobbyshaw\WatsonVisualRecognition\Commands\DeleteClassifierCommand;
 
     $app = new Application();
     $app->add(new ClassifyCommand());
     $app->add(new GetClassifiersCommand());
     $app->add(new GetClassifierCommand());
     $app->add(new CreateClassifierCommand());
+    $app->add(new DeleteClassifierCommand());
 
     $app->run();
 ?>
