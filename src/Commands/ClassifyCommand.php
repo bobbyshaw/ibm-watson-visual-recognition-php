@@ -24,19 +24,11 @@ class ClassifyCommand extends BaseCommand
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('classifiers:classify')
             ->setDescription('Use classifiers to classify image')
-            ->addArgument(
-                'username',
-                InputArgument::REQUIRED,
-                'IBM Watson Service credentials username.'
-            )
-            ->addArgument(
-                'password',
-                InputArgument::REQUIRED,
-                'IBM Watson Service credentials password.'
-            )
             ->addArgument(
                 'images',
                 InputArgument::REQUIRED,
@@ -47,12 +39,6 @@ class ClassifyCommand extends BaseCommand
                 '-c',
                 InputOption::VALUE_REQUIRED,
                 'Classifiers that should be tested against'
-            )
-            ->addOption(
-                'version-date',
-                '-d',
-                InputOption::VALUE_REQUIRED,
-                'API version date, defaults to current date i.e. latest release'
             );
     }
 

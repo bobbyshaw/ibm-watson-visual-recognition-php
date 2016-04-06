@@ -6,10 +6,7 @@ use Bobbyshaw\WatsonVisualRecognition\Message\DeleteClassifierRequest;
 use Bobbyshaw\WatsonVisualRecognition\Message\Response;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\Table;
-use Bobbyshaw\WatsonVisualRecognition\Classifier;
 
 /**
  * Command to delete a classifier
@@ -24,29 +21,15 @@ class DeleteClassifierCommand extends BaseCommand
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('classifier:delete')
             ->setDescription('Delete Classifier')
             ->addArgument(
-                'username',
-                InputArgument::REQUIRED,
-                'IBM Watson Service credentials username.'
-            )
-            ->addArgument(
-                'password',
-                InputArgument::REQUIRED,
-                'IBM Watson Service credentials password.'
-            )
-            ->addArgument(
                 'classifier_id',
                 InputArgument::REQUIRED,
                 'Classifier ID'
-            )
-            ->addOption(
-                'version-date',
-                '-d',
-                InputOption::VALUE_REQUIRED,
-                'API version date, defaults to current date i.e. latest release'
             );
     }
 

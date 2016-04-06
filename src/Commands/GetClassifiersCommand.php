@@ -3,7 +3,6 @@
 namespace Bobbyshaw\WatsonVisualRecognition\Commands;
 
 use Bobbyshaw\WatsonVisualRecognition\Message\ClassifiersResponse;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,30 +22,16 @@ class GetClassifiersCommand extends BaseCommand
      */
     protected function configure()
     {
+        parent::configure();
+        
         $this
             ->setName('classifiers:get')
             ->setDescription('Get Classifiers')
-            ->addArgument(
-                'username',
-                InputArgument::REQUIRED,
-                'IBM Watson Service credentials username.'
-            )
-            ->addArgument(
-                'password',
-                InputArgument::REQUIRED,
-                'IBM Watson Service credentials password.'
-            )
             ->addOption(
                 'api-verbose',
                 '-a',
                 InputOption::VALUE_NONE,
                 'Enable verbose API request'
-            )
-            ->addOption(
-                'version-date',
-                '-d',
-                InputOption::VALUE_REQUIRED,
-                'API version date, defaults to current date i.e. latest release'
             );
     }
 

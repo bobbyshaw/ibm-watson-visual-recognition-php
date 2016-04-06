@@ -6,7 +6,6 @@ use Bobbyshaw\WatsonVisualRecognition\Classifier;
 use Bobbyshaw\WatsonVisualRecognition\Message\ClassifierResponse;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\Table;
 
@@ -23,19 +22,11 @@ class CreateClassifierCommand extends BaseCommand
      */
     protected function configure()
     {
+        parent::configure();
+        
         $this
             ->setName('classifier:create')
             ->setDescription('Train a new classifier')
-            ->addArgument(
-                'username',
-                InputArgument::REQUIRED,
-                'IBM Watson Service credentials username.'
-            )
-            ->addArgument(
-                'password',
-                InputArgument::REQUIRED,
-                'IBM Watson Service credentials password.'
-            )
             ->addArgument(
                 'positive_examples',
                 InputArgument::REQUIRED,
@@ -50,12 +41,6 @@ class CreateClassifierCommand extends BaseCommand
                 'name',
                 InputArgument::REQUIRED,
                 'New classifier name.'
-            )
-            ->addOption(
-                'version-date',
-                '-d',
-                InputOption::VALUE_REQUIRED,
-                'API version date, defaults to latest release'
             );
     }
 
