@@ -18,7 +18,7 @@ class ClassifyRequestTest extends Base
      */
     protected $request;
 
-    /** @var [] $container */
+    /** @var array $container */
     protected $container = [];
 
     /**
